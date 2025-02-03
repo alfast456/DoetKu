@@ -2,18 +2,18 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Incomes;
+use App\Models\Expenses;
 
 class Categories extends Model
 {
-    // Inisialisasi Table
-    protected $table = 'categories';
-    public $timestamps = false;
+    use HasFactory;
 
-    // Mass Assignment
-    protected $fillable = [
-        'name_category'
-    ];
+    protected $table = 'categories';
+    protected $primaryKey = 'id_category';
+    protected $fillable = ['name_category'];
 
     // Get All Data
     public static function getAll()
@@ -49,5 +49,15 @@ class Categories extends Model
     public static function totalCategories()
     {
         return Categories::count();
+    }
+
+    public function incomes()
+    {
+        return $this->hasMany(Incomes::class, 'id_category', 'id_category');
+    }
+
+    public function expenses()
+    {
+        return $this->hasMany(Expenses::class, 'id_category', 'id_category');
     }
 }

@@ -1,10 +1,16 @@
 <?php
 
 namespace App\Models;
-use Illuminate\Database\Eloquent\Model;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
+
+use App\Models\Incomes;
+use App\Models\Expense;
 class Balance extends Model
 {
+    use HasFactory;
     // Inisilisasi Table
     protected $table = 'balance';
     public $timestamps = false;
@@ -51,19 +57,19 @@ class Balance extends Model
     // Mengambil semua data pemasukan dan pengeluaran
     public static function getAllIncomesAndExpenses()
     {
-        // Ambil semua data pemasukan dari Tabel Incomes
-        $incomes = Incomes::all();
+        // Ambil semua data pemasukan dengan tambahan kolom 'type' sebagai 'income'
+        $incomes = Incomes::select('amount', 'description', 'date', 'id_category')
+        ->with('category')
+        ->addSelect(\DB::raw("'income' as type"));
 
-        // Ambil semua data pengeluaran dari Tabel Expenses
-        $expenses = Expenses::all();
+        // Ambil semua data pengeluaran dengan tambahan kolom 'type' sebagai 'expense'
+        $expenses = Expenses::select('amount', 'description', 'date', 'id_category')
+        ->with('category')
+        ->addSelect(\DB::raw("'expense' as type"));
 
-        // Gabungkan data pemasukan dan pengeluaran dengan Join Table
-        $incomesAndExpenses = $incomes->concat($expenses);
+        // Gabungkan query pemasukan dan pengeluaran menggunakan UNION
+        $transactions = $incomes->union($expenses)->orderByDesc('date')->get();
 
-        // Urutkan data pemasukan dan pengeluaran berdasarkan tanggal
-        $incomesAndExpenses = $incomesAndExpenses->sortByDesc('date');
-
-        // Return data pemasukan dan pengeluaran
-        return $incomesAndExpenses;
+        return $transactions;
     }
 }

@@ -30,6 +30,7 @@ class DashboardController extends Controller
 
         // Ambil semua data pemasukan dan pengeluaran dari model balance
         $incomesAndExpenses = Balance::getAllIncomesAndExpenses();
+        // dd ($incomesAndExpenses);
 
         // Ambil semua data kategori dari model categories
         $categories = Categories::getAll();
@@ -50,6 +51,25 @@ class DashboardController extends Controller
         $yearly_incomes = Incomes::whereYear('date', now()->year)->sum('amount');
         $yearly_expenses = Expenses::whereYear('date', now()->year)->sum('amount');
 
+        $categoryData = Categories::withCount(['incomes', 'expenses'])
+        ->withSum('incomes', 'amount')
+        ->withSum('expenses', 'amount')
+        ->get();
+
+        // Label kategori
+        $categoryLabels = $categoryData->pluck('name_category');
+
+        // Jumlah transaksi per kategori
+        $categoryIncomes = $categoryData->pluck('incomes_count');
+        $categoryExpenses = $categoryData->pluck('expenses_count');
+
+        // Total uang yang dipakai di setiap kategori
+        $totalIncomes = $categoryData->pluck('incomes_sum_amount'); // Total pemasukan per kategori
+        $totalExpenses = $categoryData->pluck('expenses_sum_amount'); // Total pengeluaran per kategori
+
+        // format $totalIncomes dan $totalExpenses ke dalam format rupiah
+        $totalIncomes = $totalIncomes->map(fn($value) => 'Rp' . number_format($value, 0, ',', '.'));
+        $totalExpenses = $totalExpenses->map(fn($value) => 'Rp' . number_format($value, 0, ',', '.'));
         $data = [
             'total_incomes' => $total_incomes,
             'total_balance' => $total_balance,
@@ -68,9 +88,14 @@ class DashboardController extends Controller
         $chartData = [
             'labels' => ['Hari Ini', 'Bulan Ini', 'Tahun Ini', 'Total'],
             'incomes' => [$today_incomes, $monthly_incomes, $yearly_incomes, $total_incomes],
-            'expenses' => [$today_expenses, $monthly_expenses, $yearly_expenses, $total_expenses]
+            'expenses' => [$today_expenses, $monthly_expenses, $yearly_expenses, $total_expenses],
+            'categoryLabels' => $categoryLabels,
+            'categoryIncomes' => $categoryIncomes,
+            'categoryExpenses' => $categoryExpenses,
+            'totalIncomes' => $totalIncomes,
+            'totalExpenses' => $totalExpenses
         ];
-
+        // dd($chartData);
         // Kirim data total pemasukan ke view
         return view('dashboard/index', $data, compact('chartData'));
     }

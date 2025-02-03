@@ -42,4 +42,15 @@ class ExpensesController extends Controller
             return redirect('/expenses')->with(['error' => 'Terjadi kesalahan']);
         }    
     }
+
+    // delete
+    public function delete($id)
+    {
+        $expense = Expenses::deleteData($id);
+        if ($expense) {
+            return redirect('/expenses')->with(['success' => 'Data Berhasil Dihapus']);
+        } else {
+            return redirect('/expenses')->with(['error' => 'Terjadi Kesalahan']);
+        }
+    }
 }

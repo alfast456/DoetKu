@@ -4,11 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use App\Models\Categories;
 class Incomes extends Model
 {
+    use HasFactory;
     // Inisialisasi Tabel
     protected $table = 'incomes';
+    protected $primaryKey = 'id_income'; // 🔥 Pastikan ini ada!
     protected $secondaryTable = 'balance';
 
     // Fill Tabel
@@ -66,7 +70,41 @@ class Incomes extends Model
     // Delete Data
     public static function deleteData($id)
     {
-        return Incomes::where('id_income', $id)->delete();
+        try {
+            DB::beginTransaction();
+
+            // Ambil data income berdasarkan id_income
+            $income = Incomes::where('id_income', $id)->first();
+
+            if (!$income) {
+                Log::error("❌ Data income tidak ditemukan dengan id_income: " . $id);
+                DB::rollBack();
+                return false;
+            }
+
+            Log::info("✅ Data income ditemukan: ", $income->toArray());
+
+            // Hapus balance terlebih dahulu
+            $balanceDeleted = Balance::where('updated_at', $income->created_at)->delete();
+
+            // Hapus income menggunakan id_income (karena default delete() pakai 'id')
+            $incomeDeleted = Incomes::where('id_income', $id)->delete();
+
+            Log::info("🗑️ Income deleted: " . ($incomeDeleted ? "Success" : "Failed"));
+            Log::info("🗑️ Balance deleted: " . ($balanceDeleted ? "Success" : "Failed"));
+
+            if ($incomeDeleted) {
+                DB::commit();
+                return true;
+            }
+
+            DB::rollBack();
+            return false;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error("🔥 Error saat menghapus data: " . $e->getMessage());
+            return false;
+        }
     }
 
     // Total Incomes
@@ -78,5 +116,10 @@ class Incomes extends Model
             $total_incomes += $income->amount;
         }
         return $total_incomes;
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Categories::class, 'id_category', 'id_category');
     }
 }

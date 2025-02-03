@@ -4,11 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 class Expenses extends Model
 {
+    use HasFactory;
     // Inisialisasi Tabel
     protected $table = 'expenses';
+    protected $primaryKey = 'id_expense'; // ✅ Pastikan Laravel mengenali primary key
+    protected $secondaryTable = 'balance';
     public $timestamps = false;
 
     // Fill Tabel
@@ -72,5 +76,55 @@ class Expenses extends Model
 
         // Return total_expenses
         return $total_expenses;
+    }
+
+    // delete
+    public static function deleteData($id)
+    {
+        try {
+            DB::beginTransaction();
+
+            // Ambil data expense berdasarkan id_expense
+            $expense = Expenses::where('id_expense', $id)->first();
+
+            if (!$expense) {
+                Log::error("❌ Data expense tidak ditemukan dengan id_expense: " . $id);
+                DB::rollBack();
+                return false;
+            }
+
+            // Cek apakah created_at tersedia
+            if (!$expense->created_at) {
+                Log::error("❌ created_at untuk expense ID " . $id . " kosong!");
+                DB::rollBack();
+                return false;
+            }
+
+            // Hapus balance terlebih dahulu jika ada
+            $balanceDeleted = Balance::where('updated_at', $expense->created_at)->delete();
+
+            // Hapus expense setelah balance dihapus
+            $expenseDeleted = Expenses::where('id_expense', $id)->delete();
+
+            Log::info("🗑️ Expense deleted: " . ($expenseDeleted ? "Success" : "Failed"));
+            Log::info("🗑️ Balance deleted: " . ($balanceDeleted ? "Success" : "Failed"));
+
+            if ($expenseDeleted) {
+                DB::commit();
+                return true;
+            }
+
+            DB::rollBack();
+            return false;
+        } catch (\Exception $e) {
+            Log::error("🔥 Error saat menghapus data: " . $e->getMessage());
+            DB::rollBack();
+            return false;
+        }
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Categories::class, 'id_category', 'id_category');
     }
 }

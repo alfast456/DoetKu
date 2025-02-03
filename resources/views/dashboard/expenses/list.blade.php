@@ -42,7 +42,7 @@
     </div>
 
     <div class="col-md-12">
-      <h1 class="h3 mb-4 text-gray-800">Expenses</h1>
+      <h1 class="h3 mb-4 text-gray-800">Data Pengeluaran</h1>
       <div class="card shadow mb-4">
         <div class="card-header py-3">
           <!-- div beetween-->

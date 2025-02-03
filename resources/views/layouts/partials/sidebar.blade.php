@@ -56,6 +56,13 @@
             <span>Pengeluaran</span></a>
         </li>
 
+        <!-- Nav Item - Target -->
+        <li class="nav-item">
+          <a class="nav-link" href="{{route('savings')}}">
+            <i class="fas fa-fw fa-bullseye"></i>
+            <span>Target</span></a>
+        </li>
+
         <div class="text-center d-none d-md-inline">
           <br>
           <button class="rounded-sm border-0" id="sidebarToggle"></button>

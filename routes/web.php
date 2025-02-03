@@ -6,6 +6,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\ExpensesController;
 use App\Http\Controllers\IncomesController;
+use App\Http\Controllers\SavingsController;
+use App\Http\Controllers\SavingTransactionsController;
 
 // Home Route
 Route::view('/', 'home.index')->name('home');
@@ -46,6 +48,19 @@ Route::middleware(['auth'])->group(function () {
     Route::get('expenses/edit/{id}', [ExpensesController::class, 'editPage'])->name('expenses.editPage');
     Route::put('expenses/update/{id}', [ExpensesController::class, 'update'])->name('expenses.update');
     Route::get('expenses/delete/{id}', [ExpensesController::class, 'delete'])->name('expenses.delete');
+});
+
+// Savings
+Route::middleware(['auth'])->group(function () {
+    Route::get('savings', [SavingsController::class, 'index'])->name('savings');
+    Route::get('savings/add', [SavingsController::class, 'addPage'])->name('savings.addPage');
+    Route::post('savings/insert', [SavingsController::class, 'insert'])->name('savings.insert');
+    Route::get('/savings/{id}', [SavingsController::class, 'detail'])->name('savings.detail');
+    Route::post('savings/transactions/insert', [SavingTransactionsController::class, 'insert'])->name('transactions.insert');
+    Route::put('savings/transactions/update/{id}', [SavingTransactionsController::class, 'update'])->name('transactions.update');
+    Route::delete('savings/transactions/delete/{id}', [SavingTransactionsController::class, 'delete'])->name('transactions.delete');
+    Route::put('savings/update/{id}', [SavingsController::class, 'update'])->name('savings.update');
+    Route::delete('savings/delete/{id}', [SavingsController::class, 'delete'])->name('savings.delete');
 });
 
 // Dashboard Route
