@@ -7,7 +7,7 @@
 
 DoetKu is a simple web application for managing personal income and expenses. The app allows users to add, edit, delete transactions, and view summaries of their finances. It also includes features like user authentication and registration.
 
-![DoetKu](https://user-images.githubusercontent.com/70767722/138265273-2f5f3c8a-1d5f-4f6f-9b4b-2e7c9e7b5a2a.png)
+![DoetKu](https://github.com/alfast456/DoetKu/blob/main/public/img/dashboard.png?raw=true)
 
 ## Technologies Used
 - **Laravel 10**: A popular PHP framework for web development.
