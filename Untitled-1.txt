@@ -1,0 +1,5 @@
+SELECT *, SUM(hutang_detail.jumlah_cicilan) AS utang FROM `hutang_detail`
+JOIN hutang ON hutang.id = hutang_detail.hutang_id
+JOIN categories ON categories.id_category = hutang.id_category
+WHERE hutang_detail.status_cicilan = 'belum bayar'
+GROUP BY hutang.id;

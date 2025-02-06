@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>@yield('title', 'PayNote')</title>
+  <title>@yield('title', 'DoetKu')</title>
   <link href="{{ asset('css/sb-admin-2.css') }}" rel="stylesheet">
 </head>
 

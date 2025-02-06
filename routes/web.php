@@ -8,6 +8,8 @@ use App\Http\Controllers\ExpensesController;
 use App\Http\Controllers\IncomesController;
 use App\Http\Controllers\SavingsController;
 use App\Http\Controllers\SavingTransactionsController;
+use App\Http\Controllers\BillsController;
+use App\Http\Controllers\DetailBillsController;
 
 // Home Route
 Route::view('/', 'home.index')->name('home');
@@ -61,6 +63,22 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('savings/transactions/delete/{id}', [SavingTransactionsController::class, 'delete'])->name('transactions.delete');
     Route::put('savings/update/{id}', [SavingsController::class, 'update'])->name('savings.update');
     Route::delete('savings/delete/{id}', [SavingsController::class, 'delete'])->name('savings.delete');
+});
+
+// Bills
+Route::middleware(['auth'])->group(function () {
+    Route::get('bills', [BillsController::class, 'index'])->name('bills');
+    Route::get('bills/add', [BillsController::class, 'addPage'])->name('bills.addPage');
+    Route::post('bills/insert', [BillsController::class, 'insert'])->name('bills.insert');
+    Route::get('bills/edit/{id}', [BillsController::class, 'editPage'])->name('bills.editPage');
+    Route::put('bills/update/{id}', [BillsController::class, 'update'])->name('bills.update');
+    Route::get('bills/delete/{id}', [BillsController::class, 'delete'])->name('bills.delete');
+});
+
+// Detail Bills
+Route::middleware(['auth'])->group(function () {
+    Route::put('bills/detail/update/{id}', [DetailBillsController::class, 'update'])->name('bills.detail.update');
+    Route::get('bills/detail/delete/{id}', [DetailBillsController::class, 'delete'])->name('bills.detail.delete');
 });
 
 // Dashboard Route

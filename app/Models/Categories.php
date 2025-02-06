@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Incomes;
 use App\Models\Expenses;
+use App\Models\Bills;
 
 class Categories extends Model
 {
@@ -59,5 +60,10 @@ class Categories extends Model
     public function expenses()
     {
         return $this->hasMany(Expenses::class, 'id_category', 'id_category');
+    }
+
+    public function bills()
+    {
+        return $this->hasMany(Bills::class, 'id_category', 'id_category');
     }
 }

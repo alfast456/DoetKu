@@ -56,6 +56,13 @@
             <span>Pengeluaran</span></a>
         </li>
 
+        <!-- Nav Item - Tagihan -->
+        <li class="nav-item">
+          <a class="nav-link" href="{{route('bills')}}">
+            <i class="fas fa-fw fa-file-invoice"></i>
+            <span>Tagihan</span></a>
+        </li>
+        
         <!-- Nav Item - Target -->
         <li class="nav-item">
           <a class="nav-link" href="{{route('savings')}}">
