@@ -1,4 +1,4 @@
-name: Auto Create PR to Absen
+name: Auto Create PR to develop
 
 on:
   push:
@@ -22,9 +22,9 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh pr create \
-            --base absen \
+            --base develop \
             --head "${{ github.ref_name }}" \
-            --title "Auto PR: Update dari ${{ github.ref_name }} ke absen" \
+            --title "Auto PR: Update dari ${{ github.ref_name }} ke develop" \
             --body "🚀 Pull Request ini dibuat otomatis oleh GitHub Actions..." || echo "PR sudah ada."
 
       - name: Send WhatsApp Notification via Fonnte
@@ -37,7 +37,7 @@ jobs:
           MESSAGE="🚀 *New Auto PR Created!*
 
           *Repo:* ${{ github.repository }}
-          *Branch:* ${{ github.ref_name }} ➡️ absen
+          *Branch:* ${{ github.ref_name }} ➡️ develop
           *Push by:* ${{ github.actor }}
 
           Tolong segera review PR-nya di sini: 
