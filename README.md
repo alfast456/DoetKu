@@ -10,6 +10,7 @@ DoetKu is a simple web application for managing personal income and expenses. Th
 ![DoetKu](https://github.com/alfast456/DoetKu/blob/main/public/img/dashboard.png?raw=true)
 
 ## Technologies Used
+
 - **Laravel 10**: A popular PHP framework for web development.
 - **PHP 8**: The programming language used for server-side logic.
 - **MySQL**: Relational database for storing transaction data and user information.
@@ -17,6 +18,7 @@ DoetKu is a simple web application for managing personal income and expenses. Th
 - **SASS**: A CSS preprocessor for maintaining stylesheets efficiently.
 
 ## Features
+
 - **Add, Edit, and Delete Transactions**: Manage your income and expense records easily.
 - **Summary of Transactions**: View a summary of your financial records over time.
 - **Responsive Design**: Fully responsive layout that works across all devices.
@@ -30,12 +32,14 @@ DoetKu is a simple web application for managing personal income and expenses. Th
 Follow these steps to set up the project locally:
 
 1. **Clone the repository**
+
     ```bash
     git clone https://github.com/alfast456/DoetKu.git
     ```
 
 2. **Install the dependencies**
-    Navigate to the project directory and run:
+   Navigate to the project directory and run:
+
     ```bash
     composer install
     ```
@@ -46,29 +50,33 @@ Follow these steps to set up the project locally:
 
 4. **Set up environment file**
     - Copy the `.env.example` file to `.env` and update the database configuration to match your database credentials.
+
     ```bash
     cp .env.example .env
     ```
 
 5. **Generate a new application key**
+
     ```bash
     php artisan key:generate
     ```
 
 6. **Run database migrations**
-    If the migrations have not been run yet, use:
+   If the migrations have not been run yet, use:
+
     ```bash
     php artisan migrate
     ```
 
 7. **Run the application**
-    Start the Laravel development server:
+   Start the Laravel development server:
+
     ```bash
     php artisan serve
     ```
 
 8. **Access the application**
-    Open your browser and navigate to:
+   Open your browser and navigate to:
     ```bash
     http://localhost:8000
     ```
@@ -76,3 +84,5 @@ Follow these steps to set up the project locally:
 ## License
 
 This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+Made with ❤️ by Alfast456
