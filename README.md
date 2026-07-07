@@ -85,4 +85,4 @@ Follow these steps to set up the project locally:
 
 This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
-Happy Coding!
+Made with ❤️ by Alfast456
