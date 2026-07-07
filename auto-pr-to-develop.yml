@@ -1,0 +1,50 @@
+name: Auto Create PR to Absen
+
+on:
+  push:
+    branches-ignore:
+      - main
+      - develop
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create Pull Request using GitHub CLI
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr create \
+            --base absen \
+            --head "${{ github.ref_name }}" \
+            --title "Auto PR: Update dari ${{ github.ref_name }} ke absen" \
+            --body "🚀 Pull Request ini dibuat otomatis oleh GitHub Actions..." || echo "PR sudah ada."
+
+      - name: Send WhatsApp Notification via Fonnte
+        if: success()
+        env:
+          FONNTE_TOKEN: ${{ secrets.FONNTE_TOKEN }}
+          WA_TARGET: ${{ secrets.WA_GROUP_ID }}
+        run: |
+          # Menyusun pesan dengan format multi-baris
+          MESSAGE="🚀 *New Auto PR Created!*
+
+          *Repo:* ${{ github.repository }}
+          *Branch:* ${{ github.ref_name }} ➡️ absen
+          *Push by:* ${{ github.actor }}
+
+          Tolong segera review PR-nya di sini: 
+          https://github.com/${{ github.repository }}/pulls"
+
+          # Mengirim request ke Fonnte menggunakan form-data (-F)
+          curl -X POST https://api.fonnte.com/send \
+            -H "Authorization: $FONNTE_TOKEN" \
+            -F "target=$WA_TARGET" \
+            -F "message=$MESSAGE"
